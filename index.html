@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таймер Помодоро — Продуктивность и Фокус</title>
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Красивый, простой и функциональный таймер Помодоро для концентрации внимания, повышения продуктивности и отслеживания сессий.">
+    <meta name="keywords" content="помодоро, таймер помодоро, продуктивность, фокус, тайм-менеджмент, pomodoro timer">
+    <meta name="author" content="Antigravity">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Background Pattern Overlays -->
+    <div id="bg-pattern-overlay" class="pattern-overlay"></div>
+
+    <main class="app-container" id="app-container">
+        <!-- Settings Panel Trigger -->
+        <button id="settings-toggle" class="icon-btn tooltip" data-tooltip="Настройки" aria-label="Открыть настройки">
+            <i class="fas fa-cog"></i>
+        </button>
+
+        <header class="app-header">
+            <div class="logo">
+                <i class="fas fa-stopwatch logo-icon"></i>
+                <h1>FocusTime</h1>
+            </div>
+            <p class="subtitle">Управляй временем с умом</p>
+        </header>
+
+        <!-- Mode Selectors -->
+        <div class="mode-tabs">
+            <button class="mode-btn active" data-mode="work" id="mode-work">
+                <i class="fas fa-brain"></i> Фокус
+            </button>
+            <button class="mode-btn" data-mode="shortBreak" id="mode-short">
+                <i class="fas fa-coffee"></i> Короткий отдых
+            </button>
+            <button class="mode-btn" data-mode="longBreak" id="mode-long">
+                <i class="fas fa-couch"></i> Длинный отдых
+            </button>
+        </div>
+
+        <!-- Timer Display Area -->
+        <section class="timer-section">
+            <div class="timer-circle-container">
+                <svg class="progress-ring" width="340" height="340">
+                    <circle class="progress-ring-track" cx="170" cy="170" r="150" />
+                    <circle class="progress-ring-circle" id="timer-progress" cx="170" cy="170" r="150" />
+                </svg>
+                
+                <div class="timer-content">
+                    <span id="timer-time" class="time-display">25:00</span>
+                    <span id="timer-label" class="label-display">Время сфокусироваться</span>
+                </div>
+            </div>
+
+            <!-- Timer Controls -->
+            <div class="timer-controls">
+                <button id="btn-toggle" class="control-btn play-btn" aria-label="Старт">
+                    <i class="fas fa-play" id="play-icon"></i>
+                </button>
+                <button id="btn-reset" class="control-btn secondary-btn tooltip" data-tooltip="Сбросить" aria-label="Сбросить">
+                    <i class="fas fa-redo-alt"></i>
+                </button>
+                <button id="btn-skip" class="control-btn secondary-btn tooltip" data-tooltip="Пропустить" aria-label="Пропустить шаг">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats and Mini-dashboard -->
+        <section class="stats-panel">
+            <div class="stat-item">
+                <span class="stat-value" id="stats-completed">0</span>
+                <span class="stat-label">Сессии</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-value" id="stats-total-time">0 мин</span>
+                <span class="stat-label">Всего фокуса</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-value" id="stats-streak">0</span>
+                <span class="stat-label">Серия дней</span>
+            </div>
+        </section>
+
+        <!-- Quick Time Presets -->
+        <section class="presets-section">
+            <h3>Быстрый выбор времени фокуса:</h3>
+            <div class="preset-buttons">
+                <button class="preset-btn" data-time="15">15 мин</button>
+                <button class="preset-btn active" data-time="25">25 мин</button>
+                <button class="preset-btn" data-time="45">45 мин</button>
+                <button class="preset-btn" data-time="60">60 мин</button>
+            </div>
+        </section>
+
+        <!-- Sound Alert Selector for convenience -->
+        <section class="quick-settings-row">
+            <div class="setting-item-inline">
+                <label for="sound-select-inline"><i class="fas fa-volume-up"></i> Звук:</label>
+                <select id="sound-select-inline" class="custom-select">
+                    <option value="bell" selected>🔔 Классический звонок</option>
+                    <option value="digital">⏰ Электронный будильник</option>
+                    <option value="gentle">✨ Нежный гонг</option>
+                    <option value="none">🔇 Без звука</option>
+                </select>
+                <button id="test-sound-btn" class="mini-btn" aria-label="Прослушать звук">
+                    <i class="fas fa-play-circle"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Сделано с ❤️ для эффективной работы</p>
+        </footer>
+    </main>
+
+    <!-- Settings Overlay Modal -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Настройки таймера</h2>
+                <button id="settings-close" class="close-btn" aria-label="Закрыть настройки">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h3>Продолжительность (минут)</h3>
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="input-work">Фокус:</label>
+                            <span id="val-work">25</span>
+                        </div>
+                        <input type="range" id="input-work" min="1" max="90" value="25" step="1">
+                    </div>
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="input-short">Короткий отдых:</label>
+                            <span id="val-short">5</span>
+                        </div>
+                        <input type="range" id="input-short" min="1" max="30" value="5" step="1">
+                    </div>
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="input-long">Длинный отдых:</label>
+                            <span id="val-long">15</span>
+                        </div>
+                        <input type="range" id="input-long" min="1" max="45" value="15" step="1">
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Настройки звука и уведомлений</h3>
+                    <div class="toggle-control">
+                        <label for="toggle-notifications">
+                            <i class="fas fa-bell"></i> Браузерные уведомления
+                        </label>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-notifications" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-control">
+                        <label for="toggle-autostart">
+                            <i class="fas fa-redo"></i> Автостарт интервалов
+                        </label>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-autostart">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Оформление и Тема</h3>
+                    <div class="setting-item-inline">
+                        <label for="theme-select"><i class="fas fa-palette"></i> Тема:</label>
+                        <select id="theme-select" class="custom-select">
+                            <option value="aurora" selected>✨ Аврора (Стекло)</option>
+                            <option value="cyberpunk">⚡ Киберпанк (Неон)</option>
+                            <option value="arcade">👾 Аркада (8-бит)</option>
+                            <option value="zen">🍃 Дзен (Органика)</option>
+                            <option value="synthwave">🌅 Синтвейв (Ретро)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Опции звука</h3>
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="input-volume">Громкость:</label>
+                            <span id="val-volume">80%</span>
+                        </div>
+                        <input type="range" id="input-volume" min="0" max="100" value="80">
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Данные</h3>
+                    <div class="toggle-control">
+                        <label>
+                            <i class="fas fa-trash-alt"></i> Сбросить статистику
+                        </label>
+                        <button id="btn-reset-stats" class="danger-btn">Сбросить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-save-settings" class="save-btn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1105 @@
+/* Modern CSS Design System - Pomodoro Focus App */
+
+:root {
+    --bg-primary: #0f0e13;
+    --bg-glass: rgba(22, 21, 30, 0.65);
+    --bg-glass-hover: rgba(30, 28, 41, 0.85);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    
+    --primary: #ff6b6b;
+    --primary-glow: rgba(255, 107, 107, 0.4);
+    --secondary: #4dabf7;
+    --secondary-glow: rgba(77, 171, 247, 0.4);
+    --success: #51cf66;
+    --success-glow: rgba(81, 207, 102, 0.4);
+    
+    --text-main: #f8f9fa;
+    --text-muted: #a6a7ab;
+    --text-dark: #212529;
+    /* Text that appears ON the primary-colored button/element — adapts per theme */
+    --text-on-primary: #ffffff;
+    
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Layout & border variables mapping to JSON themes */
+    --border-app: 1px solid var(--border-glass);
+    --border-radius-app: 28px;
+    --border-radius-elements: 12px;
+    --box-shadow-app: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --bg-blobs-display: block;
+    
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 0 30px var(--primary-glow);
+    
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base resets & styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Use `background` (not background-color) so gradient strings render correctly */
+    background: var(--bg-primary);
+    background-attachment: fixed;
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+    padding: 20px;
+}
+
+/* Background animated blobs for a premium look */
+.glass-bg-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+    display: var(--bg-blobs-display);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.35;
+    animation: blob-float 20s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+    top: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary) 0%, rgba(255,107,107,0) 70%);
+}
+
+.blob-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--secondary) 0%, rgba(77,171,247,0) 70%);
+    animation-delay: -5s;
+    animation-duration: 25s;
+}
+
+.blob-3 {
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #862e9c 0%, rgba(134,46,156,0) 70%);
+    animation-delay: -10s;
+    animation-duration: 18s;
+}
+
+@keyframes blob-float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        transform: translate(50px, 30px) scale(1.1);
+    }
+}
+
+/* Main app container with glassmorphism */
+.app-container {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: var(--border-app);
+    border-radius: var(--border-radius-app);
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: var(--box-shadow-app);
+    position: relative;
+    z-index: 1;
+    animation: fade-in 0.8s ease;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header & Logo */
+.app-header {
+    margin-bottom: 30px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    filter: drop-shadow(0 0 10px var(--primary-glow));
+    animation: pulse-slow 3s infinite ease-in-out;
+}
+
+@keyframes pulse-slow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+.logo h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--text-main) 30%, #a6a7ab 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+}
+
+/* Settings Toggle Button */
+#settings-toggle {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 1.25rem;
+}
+
+/* Mode tabs (Work / Short / Long Break) */
+.mode-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 6px;
+    margin-bottom: 35px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.mode-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 12px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.mode-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.mode-btn.active {
+    color: var(--text-main);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom styling depending on active timer mode (work, shortBreak, longBreak) */
+.app-container.work-mode {
+    --primary: #ff6b6b;
+    --primary-glow: rgba(255, 107, 107, 0.4);
+}
+
+.app-container.shortBreak-mode {
+    --primary: #4dabf7;
+    --primary-glow: rgba(77, 171, 247, 0.4);
+}
+
+.app-container.longBreak-mode {
+    --primary: #51cf66;
+    --primary-glow: rgba(81, 207, 102, 0.4);
+}
+
+/* Timer Section with Circular Progress */
+.timer-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.timer-circle-container {
+    position: relative;
+    width: 340px;
+    height: 340px;
+    /* Prevent overflow on narrow screens / Arcade font */
+    max-width: min(340px, calc(100vw - 80px));
+    max-height: min(340px, calc(100vw - 80px));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-bottom: 30px;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: drop-shadow(0 0 12px var(--primary-glow));
+    transition: filter var(--transition-slow);
+}
+
+.progress-ring-track {
+    fill: transparent;
+    stroke: rgba(255, 255, 255, 0.03);
+    stroke-width: 10;
+}
+
+.progress-ring-circle {
+    fill: transparent;
+    stroke: var(--primary);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease, stroke var(--transition-slow);
+}
+
+.timer-active .progress-ring-circle {
+    transition: stroke-dashoffset 1s linear, stroke var(--transition-slow);
+}
+
+
+.timer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.time-display {
+    font-size: 4.8rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -2px;
+    color: var(--text-main);
+    line-height: 1;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+/* Dynamic pulsing zoom effect when timer is active */
+.timer-active .time-display {
+    animation: time-pulse 2s infinite ease-in-out;
+}
+
+@keyframes time-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+.label-display {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    max-width: 200px;
+}
+
+/* Controls */
+.timer-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.control-btn {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: var(--transition-fast);
+}
+
+.play-btn {
+    width: 80px;
+    height: 80px;
+    background: var(--primary);
+    color: var(--text-on-primary);
+    font-size: 1.8rem;
+    box-shadow: 0 8px 20px var(--primary-glow);
+}
+
+.play-btn:hover {
+    transform: scale(1.08);
+    background: var(--text-main);
+    color: var(--text-dark);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+}
+
+.play-btn:active {
+    transform: scale(0.95);
+}
+
+.secondary-btn {
+    width: 54px;
+    height: 54px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    font-size: 1.1rem;
+    border: 1px solid var(--border-glass);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.secondary-btn:active {
+    transform: translateY(1px);
+}
+
+/* Stats dashboard styling */
+.stats-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+}
+
+.stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Presets panel */
+.presets-section {
+    margin-bottom: 25px;
+}
+
+.presets-section h3 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.preset-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.preset-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.preset-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.preset-btn.active {
+    background: var(--bg-primary);
+    color: var(--primary);
+    border-color: var(--primary-glow);
+    font-weight: 600;
+}
+
+/* Quick sound setting row */
+.quick-settings-row {
+    margin-bottom: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.setting-item-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.setting-item-inline label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.custom-select {
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+    flex-grow: 1;
+    transition: var(--transition-fast);
+}
+
+.custom-select:focus {
+    border-color: var(--primary);
+}
+
+.mini-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: var(--text-main);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.mini-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Modal Overlay & Card styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-normal);
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-glass);
+    width: 90%;
+    max-width: 440px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: transform var(--transition-normal);
+}
+
+.modal-overlay.open .modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: var(--transition-fast);
+}
+
+.close-btn:hover {
+    color: var(--text-main);
+}
+
+.modal-body {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.settings-group {
+    margin-bottom: 24px;
+}
+
+.settings-group:last-child {
+    margin-bottom: 0;
+}
+
+.settings-group h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    border-left: 3px solid var(--primary);
+    padding-left: 8px;
+}
+
+.slider-control {
+    margin-bottom: 16px;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.slider-header span {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary-glow);
+    transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Switch control styling */
+.toggle-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+}
+
+.toggle-control label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+}
+
+.toggle-control i {
+    width: 18px;
+    color: var(--primary);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider.round {
+    border-radius: 34px;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: 0.4s;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slider.round:before {
+    border-radius: 50%;
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--text-main);
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: right;
+}
+
+.save-btn {
+    background: var(--primary);
+    color: var(--text-on-primary);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 10px 24px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    background: var(--text-main);
+    color: var(--text-dark);
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
+}
+
+.save-btn:active {
+    transform: translateY(0);
+}
+
+/* Icon general button */
+.icon-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-muted);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    transform: rotate(30deg);
+}
+
+/* Tooltip custom implementation */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: rgba(0, 0, 0, 0.85);
+    color: var(--text-main);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 10;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Toast Notification styling */
+.toast-container {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    width: calc(100% - 50px);
+}
+
+.toast {
+    background: rgba(22, 21, 30, 0.85);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-glass);
+    border-left: 4px solid var(--primary);
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: var(--text-main);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transform: translateX(120%);
+    transition: transform var(--transition-normal);
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast-icon {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-top: 2px;
+}
+
+.toast-content {
+    flex-grow: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+}
+
+.toast-message {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.toast-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: var(--transition-fast);
+}
+
+.toast-close:hover {
+    color: var(--text-main);
+}
+
+.danger-btn {
+    background: rgba(255, 75, 75, 0.1);
+    color: #ff4b4b;
+    border: 1px solid rgba(255, 75, 75, 0.2);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.danger-btn:hover {
+    background: #ff4b4b;
+    color: var(--text-main);
+    box-shadow: 0 4px 12px rgba(255, 75, 75, 0.3);
+}
+
+.danger-btn:active {
+    transform: scale(0.98);
+}
+
+.app-footer {
+    margin-top: 25px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.55;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive layout */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    .app-container {
+        padding: 30px 16px;
+        border-radius: 20px;
+    }
+    .timer-circle-container {
+        width: 290px;
+        height: 290px;
+    }
+    .progress-ring {
+        width: 290px;
+        height: 290px;
+    }
+    .progress-ring-track,
+    .progress-ring-circle {
+        cx: 145;
+        cy: 145;
+        r: 125;
+    }
+    .time-display {
+        font-size: 4rem;
+    }
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+    .preset-btn {
+        font-size: 0.8rem;
+    }
+}
+
+/* ============================================
+   ARCADE THEME — Press Start 2P font is wide;
+   shrink text so nothing overflows containers.
+   ============================================ */
+[style*="Press Start 2P"] .time-display,
+body[style*="Press Start 2P"] .time-display {
+    font-size: 3rem;
+    letter-spacing: 0;
+}
+
+/* Selector applied by JS theme class on body */
+.theme-arcade .time-display      { font-size: 2.8rem; letter-spacing: 0; }
+.theme-arcade .logo h1            { font-size: 1.3rem; letter-spacing: 0; }
+.theme-arcade .mode-btn           { font-size: 0.55rem; padding: 10px 4px; }
+.theme-arcade .label-display      { font-size: 0.5rem; letter-spacing: 1px; }
+.theme-arcade .stat-label         { font-size: 0.5rem; }
+.theme-arcade .stat-value         { font-size: 0.75rem; }
+.theme-arcade .presets-section h3 { font-size: 0.55rem; }
+.theme-arcade .preset-btn         { font-size: 0.55rem; padding: 10px 2px; }
+.theme-arcade .subtitle           { font-size: 0.6rem; }
+
+/* Sound-row overflows because "Press Start 2P" makes the label giant —
+   switch to column layout, hide label text (keep icon), shrink select */
+.theme-arcade .quick-settings-row       { padding-top: 10px; }
+.theme-arcade .setting-item-inline      {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+}
+.theme-arcade .setting-item-inline label {
+    font-size: 0.55rem;
+    justify-content: center;
+}
+/* Hide the text node after the icon, keep the icon itself visible */
+.theme-arcade .setting-item-inline label i { margin-right: 6px; }
+.theme-arcade .setting-item-inline label   { overflow: hidden; white-space: nowrap; }
+.theme-arcade .custom-select        { font-size: 0.5rem; width: 100%; padding: 6px 6px; }
+.theme-arcade .mini-btn             { width: 100%; border-radius: 4px; font-size: 0.6rem; height: 28px; }
+
+/* ============================================
+   ZEN THEME — light background, dark text.
+   mode-btn.active: bg-primary is cream,
+   text-main is dark green — ensure it's legible.
+   Preset active bg uses bg-primary (cream)
+   with primary (dark green) text — OK.
+   Toggle slider thumb remains white — override:
+   ============================================ */
+.theme-zen .slider.round:before  { background-color: #f4f1ea; }
+.theme-zen input:checked + .slider { background-color: #283618; }
+
+/* ============================================
+   CYBERPUNK THEME — play-btn icon must be dark
+   on cyan (#00ffff) button background:
+   --text-on-primary is set to #000 in JS.
+   Save-btn same treatment.
+   ============================================ */
+
+/* Custom Elements Radius overrides based on theme */
+.mode-tabs {
+    border-radius: var(--border-radius-elements);
+}
+.mode-btn {
+    border-radius: calc(var(--border-radius-elements) - 4px);
+}
+.preset-btn {
+    border-radius: var(--border-radius-elements);
+}
+.custom-select {
+    border-radius: var(--border-radius-elements);
+}
+.mini-btn {
+    border-radius: calc(var(--border-radius-elements) - 4px);
+}
+.modal-card {
+    border-radius: var(--border-radius-app);
+}
+.save-btn {
+    border-radius: var(--border-radius-elements);
+}
+.icon-btn {
+    border-radius: var(--border-radius-elements);
+}
+.danger-btn {
+    border-radius: var(--border-radius-elements);
+}
+.toast {
+    border-radius: var(--border-radius-elements);
+}
+
+/* Background Pattern Overlays */
+.pattern-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Grid pattern */
+.pattern-grid {
+    background-size: 30px 30px;
+    background-image: 
+        linear-gradient(to right, var(--primary) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--primary) 1px, transparent 1px);
+    opacity: 0.08;
+}
+
+/* Scanlines pattern */
+.pattern-scanlines {
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.4) 50%
+    );
+    background-size: 100% 6px;
+    opacity: 0.15;
+}
+
+/* Dots pattern */
+.pattern-dots {
+    background-image: radial-gradient(var(--primary) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    opacity: 0.12;
+}
+
+/* Diagonal stripes pattern */
+.pattern-stripes {
+    background-size: 40px 40px;
+    background-image: linear-gradient(
+        45deg, 
+        rgba(255, 255, 255, 0.03) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(255, 255, 255, 0.03) 50%, 
+        rgba(255, 255, 255, 0.03) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    opacity: 0.06;
+}
