@@ -28,6 +28,9 @@ let stats = {
     lastCompletedDate: null
 };
 
+// User-created custom themes (persisted in localStorage)
+let customThemes = {};
+
 // DOM Elements
 const appContainer = document.getElementById('app-container');
 const timerTime = document.getElementById('timer-time');
@@ -151,6 +154,9 @@ function saveSettings() {
 
 // Initialize UI elements with settings and events
 function initUI() {
+    // Load persisted custom themes before syncing select value
+    loadCustomThemes();
+
     // Sync settings modal values
     inputWork.value = settings.work;
     inputShort.value = settings.shortBreak;
@@ -248,6 +254,10 @@ function initUI() {
     // Initial setup of progress ring dasharray
     initProgressRing();
     window.addEventListener('resize', initProgressRing);
+
+    // Custom theme builder
+    initCustomThemeBuilder();
+    renderCustomThemeList();
 }
 
 // Update stats numbers on screen
@@ -673,6 +683,9 @@ function openSettings() {
     updateSliderLabel(inputLong, valLong, ' мин');
     updateSliderLabel(inputVolume, valVolume, '%');
 
+    // Refresh custom themes list
+    renderCustomThemeList();
+
     settingsModal.classList.add('open');
 }
 
@@ -939,4 +952,197 @@ function loadThemeFont(fontFamily) {
     link.href = `https://fonts.googleapis.com/css2?family=${formattedName}:wght@300;400;500;700;800;900&display=swap`;
     
     document.head.appendChild(link);
+}
+
+/* ---------------------------------------------------- */
+/* CUSTOM THEME SYSTEM                                  */
+/* ---------------------------------------------------- */
+
+// Convert #rrggbb to rgba(r,g,b,a)
+function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// Load saved custom themes from localStorage into THEMES + dropdown
+function loadCustomThemes() {
+    try {
+        const saved = localStorage.getItem('focustime_custom_themes');
+        if (saved) {
+            customThemes = JSON.parse(saved);
+            Object.keys(customThemes).forEach(key => {
+                THEMES[key] = customThemes[key];
+            });
+            refreshThemeSelect();
+            // Restore selected custom theme if saved
+            if (settings.theme && settings.theme.startsWith('custom_') && THEMES[settings.theme]) {
+                themeSelect.value = settings.theme;
+            }
+        }
+    } catch (e) {
+        console.error('Ошибка загрузки пользовательских тем:', e);
+    }
+}
+
+function saveCustomThemesToStorage() {
+    localStorage.setItem('focustime_custom_themes', JSON.stringify(customThemes));
+}
+
+// Sync <select> options with current custom themes
+function refreshThemeSelect() {
+    // Remove stale custom options
+    Array.from(themeSelect.options).forEach(opt => {
+        if (opt.value.startsWith('custom_')) opt.remove();
+    });
+    // Re-add all current custom themes
+    Object.keys(customThemes).forEach(key => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `🎨 ${customThemes[key].displayName}`;
+        themeSelect.appendChild(opt);
+    });
+}
+
+// Render the list of saved custom themes inside the builder section
+function renderCustomThemeList() {
+    const list = document.getElementById('ct-saved-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const keys = Object.keys(customThemes);
+    if (keys.length === 0) return;
+
+    keys.forEach(key => {
+        const theme = customThemes[key];
+        const isActive = settings.theme === key;
+
+        const item = document.createElement('div');
+        item.className = 'ct-saved-item';
+        item.innerHTML = `
+            <div class="ct-saved-item-info">
+                <div class="ct-swatches">
+                    <div class="ct-swatch" style="background:${theme.colorWork}" title="Фокус"></div>
+                    <div class="ct-swatch" style="background:${theme.colorShort}" title="Перерыв"></div>
+                    <div class="ct-swatch" style="background:${theme.colorLong}" title="Длинный отдых"></div>
+                </div>
+                <span class="ct-saved-item-name">${theme.displayName}${isActive ? ' ✓' : ''}</span>
+            </div>
+            <div class="ct-item-actions">
+                <button class="ct-apply-btn" data-key="${key}">Применить</button>
+                <button class="ct-delete-btn" data-key="${key}" title="Удалить тему">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        `;
+
+        item.querySelector('.ct-apply-btn').addEventListener('click', () => {
+            settings.theme = key;
+            saveSettings();
+            themeSelect.value = key;
+            applyTheme(key);
+            renderCustomThemeList();
+            showToast('Тема применена', `Тема «${theme.displayName}» активна.`);
+        });
+
+        item.querySelector('.ct-delete-btn').addEventListener('click', () => {
+            deleteCustomTheme(key);
+        });
+
+        list.appendChild(item);
+    });
+}
+
+function deleteCustomTheme(key) {
+    const name = customThemes[key]?.displayName || key;
+    // If the active theme is being deleted, fall back to aurora
+    if (settings.theme === key) {
+        settings.theme = 'aurora';
+        saveSettings();
+        applyTheme('aurora');
+        themeSelect.value = 'aurora';
+    }
+    delete customThemes[key];
+    delete THEMES[key];
+    saveCustomThemesToStorage();
+    refreshThemeSelect();
+    renderCustomThemeList();
+    showToast('Тема удалена', `«${name}» была удалена.`);
+}
+
+// Wire up the custom theme builder form
+function initCustomThemeBuilder() {
+    const addBtn = document.getElementById('ct-add-btn');
+    if (!addBtn) return;
+
+    addBtn.addEventListener('click', () => {
+        const nameInput = document.getElementById('ct-name');
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            showToast('Введите название', 'Задайте название для новой темы.');
+            nameInput.focus();
+            return;
+        }
+
+        // Read color values
+        const bg       = document.getElementById('ct-bg').value;
+        const glass    = document.getElementById('ct-glass').value;
+        const textMain = document.getElementById('ct-text').value;
+        const textMuted= document.getElementById('ct-muted').value;
+        const work     = document.getElementById('ct-work').value;
+        const shortC   = document.getElementById('ct-short').value;
+        const longC    = document.getElementById('ct-long').value;
+        const btnText  = document.getElementById('ct-btn-text').value;
+        const radius   = (document.querySelector('input[name="ct-radius"]:checked') || {}).value || 'rounded';
+
+        const radiiMap = {
+            sharp:   { app: '4px',  el: '4px' },
+            rounded: { app: '24px', el: '12px' },
+            pill:    { app: '40px', el: '20px' }
+        };
+        const radii = radiiMap[radius] || radiiMap.rounded;
+
+        // Unique key (sanitized name + timestamp)
+        const key = `custom_${name.toLowerCase().replace(/[^a-z0-9а-яё]/gi, '-')}_${Date.now()}`;
+
+        const themeObj = {
+            displayName: name,
+            isCustom: true,
+            bgPrimary: bg,
+            bgGlass: hexToRgba(glass, 0.78),
+            borderApp: `1px solid ${hexToRgba(textMain, 0.1)}`,
+            borderRadiusApp: radii.app,
+            borderRadiusElements: radii.el,
+            boxShadowApp: '0 20px 25px -5px rgba(0,0,0,0.3), 0 10px 10px -5px rgba(0,0,0,0.04)',
+            bgBlobsDisplay: 'none',
+            textMain,
+            textMuted,
+            textOnPrimary: btnText,
+            fontSans: "'Outfit', sans-serif",
+            patternClass: '',
+            colorWork: work,
+            colorWorkGlow: hexToRgba(work, 0.4),
+            colorShort: shortC,
+            colorShortGlow: hexToRgba(shortC, 0.4),
+            colorLong: longC,
+            colorLongGlow: hexToRgba(longC, 0.4)
+        };
+
+        // Save and apply
+        customThemes[key] = themeObj;
+        THEMES[key] = themeObj;
+        saveCustomThemesToStorage();
+        refreshThemeSelect();
+
+        settings.theme = key;
+        saveSettings();
+        themeSelect.value = key;
+        applyTheme(key);
+
+        renderCustomThemeList();
+        nameInput.value = '';
+        showToast('Тема добавлена!', `«${name}» применена.`);
+    });
 }

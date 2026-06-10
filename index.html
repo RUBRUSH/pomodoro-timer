@@ -203,6 +203,69 @@
                 </div>
 
                 <div class="settings-group">
+                    <h3><i class="fas fa-paint-brush"></i> Своя тема</h3>
+                    <div class="ct-field">
+                        <label for="ct-name">Название темы</label>
+                        <input type="text" id="ct-name" class="ct-text-input" placeholder="Моя тема" maxlength="24">
+                    </div>
+                    <div class="ct-colors-grid">
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-bg" value="#0f0e13">
+                            <label for="ct-bg">Фон</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-glass" value="#16151e">
+                            <label for="ct-glass">Карточка</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-text" value="#f8f9fa">
+                            <label for="ct-text">Текст</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-muted" value="#a6a7ab">
+                            <label for="ct-muted">Доп. текст</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-work" value="#ff6b6b">
+                            <label for="ct-work">Фокус</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-short" value="#4dabf7">
+                            <label for="ct-short">Перерыв</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-long" value="#51cf66">
+                            <label for="ct-long">Длин. отдых</label>
+                        </div>
+                        <div class="ct-color-item">
+                            <input type="color" id="ct-btn-text" value="#ffffff">
+                            <label for="ct-btn-text">Текст кнопки</label>
+                        </div>
+                    </div>
+                    <div class="ct-radius-row">
+                        <span class="ct-radius-label">Скругление</span>
+                        <div class="ct-radio-group">
+                            <label class="ct-radio-label">
+                                <input type="radio" name="ct-radius" value="sharp">
+                                <span>Острые</span>
+                            </label>
+                            <label class="ct-radio-label">
+                                <input type="radio" name="ct-radius" value="rounded" checked>
+                                <span>Мягкие</span>
+                            </label>
+                            <label class="ct-radio-label">
+                                <input type="radio" name="ct-radius" value="pill">
+                                <span>Таблетки</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button id="ct-add-btn" class="ct-add-btn">
+                        <i class="fas fa-plus-circle"></i> Добавить тему
+                    </button>
+                    <div id="ct-saved-list" class="ct-saved-list"></div>
+                </div>
+
+                <div class="settings-group">
                     <h3>Опции звука</h3>
                     <div class="slider-control">
                         <div class="slider-header">

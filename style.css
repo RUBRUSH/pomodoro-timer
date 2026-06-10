@@ -1103,3 +1103,252 @@ body[style*="Press Start 2P"] .time-display {
     );
     opacity: 0.06;
 }
+
+/* ============================================
+   CUSTOM THEME BUILDER STYLES
+   ============================================ */
+
+.ct-field {
+    margin-bottom: 12px;
+}
+
+.ct-field > label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.ct-text-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--border-radius-elements);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+
+.ct-text-input:focus {
+    border-color: var(--primary);
+}
+
+.ct-text-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.ct-colors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.ct-color-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.ct-color-item input[type="color"] {
+    width: 100%;
+    height: 42px;
+    border: 2px solid var(--border-glass);
+    border-radius: 10px;
+    cursor: pointer;
+    background: none;
+    padding: 3px;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+    -webkit-appearance: none;
+}
+
+.ct-color-item input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 7px;
+}
+
+.ct-color-item input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 7px;
+}
+
+.ct-color-item input[type="color"]:hover {
+    border-color: var(--primary);
+    transform: scale(1.06);
+}
+
+.ct-color-item label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Radius row */
+.ct-radius-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.ct-radius-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.ct-radio-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.ct-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-glass);
+    transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    user-select: none;
+}
+
+.ct-radio-label:has(input:checked) {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.ct-radio-label input[type="radio"] {
+    display: none;
+}
+
+/* Add theme button */
+.ct-add-btn {
+    width: 100%;
+    background: var(--primary);
+    color: var(--text-on-primary);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 11px;
+    border: none;
+    border-radius: var(--border-radius-elements);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.ct-add-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.12);
+    box-shadow: 0 6px 18px var(--primary-glow);
+}
+
+.ct-add-btn:active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+}
+
+/* Saved themes list */
+.ct-saved-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ct-saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--border-radius-elements);
+    transition: background var(--transition-fast);
+}
+
+.ct-saved-item:hover {
+    background: rgba(0, 0, 0, 0.22);
+}
+
+.ct-saved-item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ct-swatches {
+    display: flex;
+    gap: 3px;
+}
+
+.ct-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+}
+
+.ct-saved-item-name {
+    font-size: 0.85rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.ct-item-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.ct-apply-btn {
+    background: transparent;
+    border: 1px solid var(--border-glass);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: var(--transition-fast);
+}
+
+.ct-apply-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.ct-delete-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 75, 75, 0.55);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+    padding: 4px 6px;
+    border-radius: 6px;
+    line-height: 1;
+}
+
+.ct-delete-btn:hover {
+    color: #ff4b4b;
+    background: rgba(255, 75, 75, 0.1);
+}
